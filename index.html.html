@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>PG Manager</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0B0D12">
+<link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#0B0D12;--s1:#14171E;--s2:#1C2029;--ln:#262B36;--y:#FFC933;--tx:#F2F4F8;--mu:#8B93A3;--g:#34D399;--r:#F87171;--am:#FBBF24}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums;padding-bottom:calc(170px + env(safe-area-inset-bottom))}
+header{padding:calc(16px + env(safe-area-inset-top)) 16px 4px;background:radial-gradient(120% 80% at 0 0,#2b2309 0,transparent 60%)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#FFD84D,#FF9F1C);display:grid;place-items:center;font-size:22px}
+h1{margin:0;font-size:20px;letter-spacing:-.3px}.sb{color:var(--mu);font-size:13px}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.stat{background:var(--s1);border:1px solid var(--ln);border-radius:18px;padding:14px}
+.stat span,.stat small{color:var(--mu);font-size:13px}.stat b{display:block;font-size:24px;margin:2px 0;letter-spacing:-.5px}
+.o{color:var(--am)}.g{color:var(--g)}
+.bar{height:6px;border-radius:6px;background:var(--s2);margin:12px 2px 0;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--g),#6EE7B7);border-radius:6px}
+.srch{margin-top:14px;position:relative}.srch svg{position:absolute;left:14px;top:15px;width:20px;height:20px;stroke:var(--mu);fill:none;stroke-width:2;stroke-linecap:round}
+input{width:100%;padding:14px;border-radius:14px;border:1px solid var(--ln);background:var(--s1);color:var(--tx);font:inherit}
+input:focus{outline:2px solid var(--y);border-color:transparent}#q{padding-left:44px}
+.seg{display:flex;background:var(--s1);border:1px solid var(--ln);border-radius:14px;padding:4px;margin:12px 0 4px}
+.seg button{flex:1;min-height:44px;border:0;border-radius:11px;background:none;color:var(--mu);font:600 15px inherit;font-family:inherit}
+.seg button.on{background:var(--y);color:#1a1300}
+main{padding:12px 16px}
+.c{background:var(--s1);border:1px solid var(--ln);border-radius:20px;padding:16px;margin-bottom:12px}
+.hd{display:flex;gap:12px;align-items:center}.who{flex:1;min-width:0}
+.av{width:44px;height:44px;border-radius:50%;background:var(--s2);color:var(--y);display:grid;place-items:center;font-weight:700;flex:none}
+.nm{font-size:17px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mu{color:var(--mu);font-size:13px}
+.pill{padding:4px 10px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}.pill.ok{background:#0f2d22;color:var(--g)}.pill.wa{background:#33270a;color:var(--am)}
+.bill{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;background:var(--s2);border-radius:14px;padding:12px}
+.bill span{display:block;color:var(--mu);font-size:12px}.bill b{font-size:16px}.tl b{color:var(--y)}
+.rd{margin-top:12px}.rd label{display:block;color:var(--mu);font-size:13px;margin-bottom:6px}
+.lnk{display:block;margin-top:10px;color:var(--tx);text-decoration:none}
+.bt{display:flex;gap:10px;margin-top:14px}
+.b,a.b{flex:1;min-height:52px;border:1px solid var(--ln);border-radius:14px;font:600 16px inherit;font-family:inherit;background:var(--s2);color:var(--tx);display:flex;align-items:center;justify-content:center;text-decoration:none}
+.b.y{background:linear-gradient(135deg,#FFD84D,#FFB020);color:#1a1300;border:0}.b.g{background:#25D366;color:#04260f;border:0}.b.r{color:var(--r)}.b.ic{flex:0 0 52px}.b.off{opacity:.4;pointer-events:none}
+nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,1fr);padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:rgba(11,13,18,.92);backdrop-filter:blur(12px);border-top:1px solid var(--ln)}
+.ni{border:0;background:none;color:var(--mu);display:flex;flex-direction:column;align-items:center;gap:2px;min-height:54px;font:600 12px inherit;font-family:inherit}.ni.on{color:var(--y)}
+.ni svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fab{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom));padding:0 22px;min-height:56px;border-radius:28px;border:0;background:linear-gradient(135deg,#FFD84D,#FFB020);color:#1a1300;font:700 17px inherit;font-family:inherit;box-shadow:0 8px 24px #000a;z-index:6}
+.ov{position:fixed;inset:0;background:#000a;backdrop-filter:blur(3px);display:flex;align-items:flex-end;z-index:20}
+.sh{background:var(--s1);border-top:1px solid var(--ln);width:100%;max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom))}
+.sh::before{content:"";display:block;width:40px;height:4px;border-radius:4px;background:var(--ln);margin:-8px auto 14px}
+.sh h2{margin:0 0 10px;font-size:20px}.sh label{display:block;margin-top:12px;color:var(--mu);font-size:13px}.sh label input{margin-top:6px}
+.sh .bt{flex-wrap:wrap}.row{display:flex;justify-content:space-between;margin:8px 0}.tot{font-size:20px;font-weight:800;color:var(--y)}
+.empty{text-align:center;color:var(--mu);margin-top:40px;padding:0 20px}
+</style></head><body>
+<header><div class="brand"><div class="logo">🏠</div><div><h1 id="h"></h1><div class="sb" id="sb"></div></div></div>
+<div class="sum" id="s"></div>
+<div class="srch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input id="q" placeholder="Search name, room or phone" oninput="q=this.value;R()"></div>
+<div class="seg" id="seg"><button id="t_baaki" onclick="T('baaki')">Pending</button><button id="t_paid" onclick="T('paid')">Paid</button><button id="t_sab" onclick="T('sab')">All</button></div></header>
+<main id="m"></main>
+<button class="fab" onclick="edit()">+ Tenant</button>
+<nav><button class="ni on" id="n_home" onclick="T('baaki')"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+<button class="ni" id="t_stu" onclick="T('stu')"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .6 3.3 2.3 3.6 5.2"/></svg>Students</button>
+<button class="ni" onclick="cfg()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/></svg>Settings</button></nav>
+<div class="ov" id="ov" hidden onclick="if(event.target===this)X()"><div class="sh" id="sh"></div></div>
+<script>
+const K='pgdata1';let tab='baaki',q='';
+const def=()=>({pg:'Sharma PG',owner:'Sharma Ji',rate:10,t:[]});
+let D;try{D=JSON.parse(localStorage.getItem(K))||def()}catch(e){D=def()}
+const $=s=>document.getElementById(s);
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(e){alert('Could not save data!')}};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mk=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+const mn=()=>new Date().toLocaleString('en-IN',{month:'long',year:'numeric'});
+const un=t=>Math.max(0,(+t.curr||0)-(+t.prev||0));
+const bj=t=>Math.round(un(t)*D.rate);
+const tt=t=>(+t.rent||0)+bj(t);
+const pd=t=>t.paid===mk();
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+const find=id=>D.t.find(x=>x.id==id);
+function wa(t){const n=String(t.phone||'').replace(/\D/g,'').slice(-10);
+const m=`Hello ${t.name},\nHere is your ${mn()} bill from ${D.pg}:\nRoom: ${t.room}\nRent: ${inr(t.rent||0)}\nElectricity: ${inr(bj(t))} (${un(t)} units x ₹${D.rate})\nTotal: ${inr(tt(t))}\nPlease pay at your earliest convenience. Thank you!\n- ${D.owner}`;
+return 'https://wa.me/91'+n+'?text='+encodeURIComponent(m)}
+function T(x){tab=x;R()}
+function R(){
+$('h').textContent=D.pg;$('sb').textContent='Hello, '+D.owner;
+['baaki','paid','sab','stu'].forEach(x=>$('t_'+x).classList.toggle('on',x===tab));$('n_home').classList.toggle('on',tab!=='stu');$('seg').hidden=tab==='stu';
+const bak=D.t.filter(t=>!pd(t));
+const pend=bak.reduce((a,t)=>a+tt(t),0),col=D.t.filter(pd).reduce((a,t)=>a+(+t.amt||0),0),pc=pend+col?Math.round(col/(pend+col)*100):0;
+$('s').innerHTML=`<div class="st"><div class="stat"><span>Pending</span><b class="o">${inr(pend)}</b><small>${bak.length} of ${D.t.length} students</small></div><div class="stat"><span>Collected</span><b class="g">${inr(col)}</b><small>${mn()}</small></div></div><div class="bar"><i style="width:${pc}%"></i></div>`;
+const s=q.trim().toLowerCase();
+const L=D.t.filter(t=>(tab==='sab'||tab==='stu'||(tab==='paid')===pd(t))&&(!s||[t.name,t.room,t.phone,t.email].join(' ').toLowerCase().includes(s)))
+.sort((a,b)=>String(a.room).localeCompare(String(b.room),undefined,{numeric:true}));
+$('m').innerHTML=L.length?L.map(tab==='stu'?scard:card).join(''):`<div class="empty">${D.t.length?'Nobody here':'No tenants yet. Tap "+ Tenant" or load sample data in ⚙.'}</div>`}
+const ini=n=>String(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+function card(t){const p=pd(t),ok=String(t.phone||'').replace(/\D/g,'').length>=10;
+return `<div class="c"><div class="hd"><div class="av">${esc(ini(t.name))}</div><div class="who"><div class="nm">${esc(t.name)}</div><div class="mu">Room ${esc(t.room)}${t.phone?' · '+esc(t.phone):''}</div></div><span class="pill ${p?'ok':'wa'}">${p?'Cleared'+(t.paidOn?' · '+new Date(t.paidOn).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):''):'Pending'}</span></div>
+<div class="bill"><div><span>Rent</span><b>${inr(t.rent||0)}</b></div><div><span>Electricity (${un(t)}u)</span><b>${inr(bj(t))}</b></div><div class="tl"><span>Total</span><b>${inr(tt(t))}</b></div></div>
+${p?'':`<div class="rd"><label>Meter reading (previous: ${t.prev||0})</label><input type="number" inputmode="decimal" placeholder="Enter current reading" value="${t.curr||''}" onchange="rdg('${t.id}',this.value)"></div>`}
+<div class="bt">${p?`<button class="b r" onclick="unpay('${t.id}')">Undo</button>`:`<button class="b y" onclick="pay('${t.id}')">✔ Mark Paid</button><a class="b g ${ok?'':'off'}" href="${ok?wa(t):'#'}" target="_blank" rel="noopener">WhatsApp</a>`}<button class="b ic" onclick="edit('${t.id}')" aria-label="Edit">✎</button></div></div>`}
+function scard(t){const a=(h,x,i)=>x?`<a class="lnk" href="${h}${esc(x)}">${i} ${esc(x)}</a>`:`<span class="mu lnk">${i} -</span>`;
+return `<div class="c"><div class="hd"><div class="av">${esc(ini(t.name))}</div><div class="who"><div class="nm">${esc(t.name)}</div><div class="mu">Room ${esc(t.room)} · ${inr(t.rent||0)}/month</div></div></div>
+${a('tel:',t.phone,'📞')}${a('mailto:',t.email,'✉')}
+<div class="bt"><button class="b" onclick="edit('${t.id}')">✎ Edit student</button></div></div>`}
+function rdg(id,v){const t=find(id);if(v!==''&&(+v<0||+v<(+t.prev||0))){alert('Current reading cannot be lower than the previous reading ('+(t.prev||0)+').');R();return}t.curr=v;save();R()}
+function pay(id){const t=find(id);
+sheet(`<h2>Confirm payment</h2><div class="nm">${esc(t.name)} · Room ${esc(t.room)}</div>
+<div class="row"><span>Rent</span><b>${inr(t.rent||0)}</b></div>
+<div class="row"><span>Electricity (${un(t)} units)</span><b>${inr(bj(t))}</b></div>
+<div class="row"><span>Total due</span><span class="tot">${inr(tt(t))}</span></div>
+<label>Amount received (₹) - verify<input id="f_amt" type="number" inputmode="decimal" value="${tt(t)}"></label>
+<div id="f_err" style="color:var(--r);margin-top:8px"></div>
+<div class="bt"><button class="b y" onclick="doPay('${id}')">Confirm &amp; Clear</button><button class="b" onclick="X()">Cancel</button></div>`)}
+function doPay(id){const t=find(id);if(!t||pd(t)||!$('f_amt'))return;const a=+$('f_amt').value,d=Math.round(tt(t))-Math.round(a);
+if(d){$('f_err').textContent=d>0?`Short by ${inr(d)}. Enter the full amount to clear.`:`Extra ${inr(-d)} entered. Amount must match the total.`;return}
+t.amt=tt(t);t.paidOn=new Date().toISOString();t.lastPrev=t.prev;if(+t.curr>0)t.prev=t.curr;t.paid=mk();save();R();
+sheet(`<div style="text-align:center"><div style="font-size:64px">✅</div><h2>Cleared</h2><div class="mu">${esc(t.name)} · Room ${esc(t.room)}<br>${inr(t.amt)} received</div><div class="bt"><button class="b y" onclick="X()">Done</button></div></div>`)}
+function unpay(id){const t=find(id);t.paid='';t.paidOn='';if(t.lastPrev!==undefined)t.prev=t.lastPrev;save();R()}
+function X(){$('ov').hidden=true;try{if(location.hash==='#form')history.back()}catch(e){}}
+function sheet(h){$('sh').innerHTML=h;$('ov').hidden=false;try{if(location.hash!=='#form')location.hash='form'}catch(e){}}
+function edit(id){const t=id?find(id):{};
+sheet(`<h2>${id?'Edit tenant':'New tenant'}</h2>
+<label>Room number<input id="f_room" value="${esc(t.room)}"></label>
+<label>Name<input id="f_name" value="${esc(t.name)}"></label>
+<label>Phone (10 digits)<input id="f_phone" type="tel" inputmode="numeric" value="${esc(t.phone)}"></label>
+<label>Email<input id="f_email" type="email" value="${esc(t.email)}"></label>
+<label>Monthly rent (₹)<input id="f_rent" type="number" inputmode="numeric" value="${esc(t.rent)}"></label>
+<label>Electricity: previous reading<input id="f_prev" type="number" inputmode="decimal" value="${esc(t.prev)}"></label>
+<label>Electricity: current reading<input id="f_curr" type="number" inputmode="decimal" value="${esc(t.curr)}"></label>
+<div class="bt"><button class="b y" onclick="saveT('${id||''}')">Save</button><button class="b" onclick="X()">Cancel</button>${id?`<button class="b r" onclick="del('${id}')">Delete</button>`:''}</div>`)}
+function saveT(id){const g=k=>$('f_'+k).value.trim();
+if(!g('room')||!g('name')){alert('Room number and name are required');return}
+if(g('phone')&&g('phone').replace(/\D/g,'').length<10){alert('Phone must have 10 digits');return}
+if(g('email')&&!/^\S+@\S+\.\S+$/.test(g('email'))){alert('Enter a valid email');return}
+if(!(+g('rent')>0)){alert('Enter the monthly rent');return}
+if(g('curr')!==''&&+g('curr')<+(g('prev')||0)){alert('Current reading cannot be lower than previous');return}
+const o={room:g('room'),name:g('name'),phone:g('phone'),email:g('email'),rent:g('rent'),prev:g('prev'),curr:g('curr')};
+if(id)Object.assign(find(id),o);else D.t.push({id:Date.now()+''+Math.floor(Math.random()*999),paid:'',...o});
+save();X();R()}
+function del(id){const t=find(id);if(!confirm(`Delete ${t.name}?`))return;D.t=D.t.filter(x=>x.id!=id);save();X();R()}
+function cfg(){sheet(`<h2>Settings</h2>
+<label>PG name<input id="c_pg" value="${esc(D.pg)}"></label>
+<label>Owner name<input id="c_ow" value="${esc(D.owner)}"></label>
+<label>Electricity rate (₹ per unit)<input id="c_rate" type="number" inputmode="decimal" value="${D.rate}"></label>
+<div class="bt"><button class="b y" onclick="saveC()">Save</button><button class="b" onclick="X()">Close</button></div>
+<h2 style="margin-top:22px">Backup</h2>
+<div class="bt"><button class="b" onclick="exp()">⬇ Export</button><button class="b" onclick="$('imp').click()">⬆ Import</button></div>
+<div class="bt"><button class="b" onclick="sample()">Load sample data</button><button class="b r" onclick="wipe()">Delete all</button></div>
+<input type="file" id="imp" accept=".json,application/json" hidden onchange="imp(this)">
+<p class="mu">Data is stored only on this phone. Export a backup once a week and save the file on WhatsApp or Drive.</p>`)}
+function sample(){if(D.t.length&&!confirm('Add 8 sample students to your list?'))return;
+[['101','Rahul Verma',6500,1200,1262],['102','Aman Gupta',6500,980,1041],['103','Karthik Reddy',7000,2210,2290],['104','Sneha Iyer',7000,1500,1556],['201','Priya Singh',8000,760,812],['202','Mohit Yadav',8000,3010,3098],['203','Ankit Sharma',6000,450,''],['204','Divya Nair',6000,1320,1377]].forEach((r,i)=>D.t.push({id:Date.now()+'s'+i,paid:'',room:r[0],name:r[1],phone:'987650000'+(i+1),email:r[1].split(' ')[0].toLowerCase()+'@example.com',rent:r[2],prev:r[3],curr:r[4]}));save();X();R()}
+function wipe(){if(!confirm('Delete ALL students and data? Export a backup first.')||!confirm('Are you sure? This cannot be undone.'))return;D.t=[];save();X();R()}
+function saveC(){D.pg=$('c_pg').value.trim()||'PG';D.owner=$('c_ow').value.trim()||'Owner';D.rate=Math.max(0,+$('c_rate').value||0);save();X();R()}
+function exp(){const b=new Blob([JSON.stringify(D,null,2)],{type:'application/json'});const a=document.createElement('a');
+a.href=URL.createObjectURL(b);a.download='pg-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function imp(el){const f=el.files[0];if(!f)return;const r=new FileReader();
+r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.t))throw 0;
+if(!confirm(`Found ${d.t.length} tenants. Replace current data?`))return;
+D={...def(),...d};D.t=D.t.map((x,i)=>({id:Date.now()+'i'+i,paid:'',...x}));save();X();R()}catch(e){alert('This is not a valid backup file')}};r.readAsText(f);el.value=''}
+R();
+addEventListener('hashchange',()=>{if(location.hash!=='#form')$('ov').hidden=true});
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script></body></html>
